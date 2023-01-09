@@ -1,99 +1,171 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import { refreshList, addTodo , deleteTodo , updateTodo } from "./Item.actions";
+import React, { useEffect } from "react"
+import { useAppDispatch, useAppSelector } from "../../redux/hooks"
+import { fetchItems, addItem, deleteItem, updateItem } from "../../redux/item/item.action"
 
+function itemList() {
+    const dispatch = useAppDispatch()
+    const { items, loading } = useAppSelector((state) => {
+        console.log(state)
+        return { items: state.itemReducer.items, loading: state.itemReducer.loading }
+    })
 
-class TodoList extends Component {
-  constructor(props) {
-    
-    super(props);
-    this.state = {
-      text: "TRY",
-      id: -1
-    };
-    
-  }
+    useEffect(() => {
+        dispatch(fetchItems())
+    }, [])
 
-  componentDidMount() {
-   
-    this.props.refreshList()
-  }
-  onChange = event => {
-    this.setState({ text: event.target.value });
-  }
-  addClick = event => {
-    this.state.id ++
+    useEffect(() => {
+        console.log(loading)
+    }, [loading])
 
-    var data = {
-      id: this.state.id,
-      text: this.state.text
+    const addClick = () => {
+        var data = {
+            id: 1,
+            name: "test",
+        }
+
+        dispatch(
+            addItem({
+                data,
+            }),
+        )
+            .unwrap()
+            .then(() => {
+                dispatch(fetchItems())
+            })
     }
 
-    addTodo(data)
-    this.props.refreshList()   
-  }
+    const deleteClick = () => {
+        var data = {
+            id: 1,
+            name: "test",
+        }
 
-  deleteClick = id => {
-    
-    var data = {
-      id: id,
-      text: this.state.text
+        dispatch(
+            deleteItem({
+                data,
+            }),
+        )
+            .unwrap()
+            .then(() => {
+                dispatch(fetchItems())
+            })
     }
-    deleteTodo(data)
-    this.props.refreshList()  
-  }
 
-  updateClick = (id) => {
-    var data = {
-      id: id,
-      text: this.state.text
+    const updateClick = () => {
+        var data = {
+            id: 1,
+            name: "updated",
+        }
+
+        dispatch(
+            updateItem({
+                data,
+            }),
+        )
+            .unwrap()
+            .then(() => {
+                dispatch(fetchItems())
+            })
     }
-    console.log(data)
-    updateTodo(data)
-    this.props.refreshList() 
-  }
-  render() {
+
     return (
-      <div>
-  
-          <div>
+        <>
             <div>
-              <label htmlFor="title"></label>
+                <div>
+                    <div>
+                        <label htmlFor="title"></label>
+                    </div>
+                    <input type="text" id="text" />
+                    <button onClick={addClick}>ADD TODO</button>
+                </div>
             </div>
-            <input
-              type="text"
-              id="text"
-              value={this.text}
-              onChange={this.onChange}
-            />
-            <button onClick = {this.addClick}>ADD TODO</button>
-          </div>
-   
-        
-          {this.props.items.map(item => (
-          
-              <div key={item.id}>
-                {item.name}
-                <button onClick = {() => {this.deleteClick(item.id)} }>Delete</button> 
-                <button onClick = {() => {this.updateClick(item.id)} }>Update</button> 
-              </div>
-              
-            
-          ))}
-      </div>
-    );
-  }
+            {items.map((item) => (
+                <div key={item.id}>
+                    {item.name}
+                    <button onClick={deleteClick}>Delete</button>
+                    <button onClick={updateClick}>Update</button>
+                </div>
+            ))}
+        </>
+    )
 }
 
-const mapStateToProps = state => ({
-  items: state.items.items
-});
+export default itemList
 
-const mapDispatchToProps = dispatch => ({
-  refreshList: () => dispatch(refreshList)
-});
+// class TodoList extends Component {
+//     constructor(props) {
+//         super(props)
+//         this.state = {
+//             text: "TRY",
+//             id: -1,
+//         }
+//     }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(TodoList);
+//     componentDidMount() {
+//         // this.props.refreshList()
+//     }
+//     onChange = (event) => {
+//         // this.setState({ text: event.target.value })
+//     }
+//     addClick = (event) => {
+//         // this.state.id ++
+//         // var data = {
+//         //   id: this.state.id,
+//         //   text: this.state.text
+//         // }
+//         // addTodo(data)
+//         // this.props.refreshList()
+//     }
+
+//     deleteClick = (id) => {
+//         // var data = {
+//         //   id: id,
+//         //   text: this.state.text
+//         // }
+//         // deleteTodo(data)
+//         // this.props.refreshList()
+//     }
+
+//     updateClick = (id) => {
+//         // var data = {
+//         //   id: id,
+//         //   text: this.state.text
+//         // }
+//         // console.log(data)
+//         // updateTodo(data)
+//         // this.props.refreshList()
+//     }
+//     render() {
+//         return (
+//             <div>
+//                 <div>
+//                     <div>
+//                         <label htmlFor="title"></label>
+//                     </div>
+//                     <input type="text" id="text" value={this.text} onChange={this.onChange} />
+//                     <button onClick={this.addClick}>ADD TODO</button>
+//                 </div>
+
+//                 {this.props.items.map((item) => (
+//                     <div key={item.id}>
+//                         {item.name}
+//                         <button
+//                             onClick={() => {
+//                                 this.deleteClick(item.id)
+//                             }}
+//                         >
+//                             Delete
+//                         </button>
+//                         <button
+//                             onClick={() => {
+//                                 this.updateClick(item.id)
+//                             }}
+//                         >
+//                             Update
+//                         </button>
+//                     </div>
+//                 ))}
+//             </div>
+//         )
+//     }
+// }
