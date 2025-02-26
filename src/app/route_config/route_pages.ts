@@ -7,6 +7,7 @@ import reservationPage from "../pages/reservation/reservationPage"
 import aboutPage from "../pages/about/aboutPage"
 import contactPage from "../pages/contact/contactPage"
 import profilePage from "../pages/profile/profilePage"
+import itemList from "../pages/item/ItemList"
 
 export enum RoutePage {
     home,
@@ -20,7 +21,7 @@ export enum RoutePage {
 export function getRoute(routePage: any) {
     switch (routePage) {
         case RoutePage.home:
-            return new RouteEntity("/", true, homePage)
+            return new RouteEntity("/", true, itemList)
         case RoutePage.menu:
             return new RouteEntity("/menu", true, menuPage)
         case RoutePage.reservation:

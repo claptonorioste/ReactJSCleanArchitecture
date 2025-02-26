@@ -4,8 +4,11 @@ import { Todo } from "../../../domain/entities/Todo"
 import { TodoServiceImpl } from "../../../domain/usecases/TodoService"
 
 export const fetchItems = createAsyncThunk("item/fetchItems", async () => {
-    const itemDataRepo = new TodoRepositoryImpl()
-    const itemService = new TodoServiceImpl(itemDataRepo)
+    const itemDataRepo = new TodoRepositoryImpl() // DATA REPO
+
+    const itemService = new TodoServiceImpl(itemDataRepo)//USECASE
+
+    
     const items = await itemService.GetTodos()
     return items
 })

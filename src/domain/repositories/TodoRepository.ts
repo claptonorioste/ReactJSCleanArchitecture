@@ -5,4 +5,6 @@ export interface TodoRepository {
   AddTodo(data:Todo): void;
   DeleteTodo(data:Todo): void;
   UpdateTodo(data:Todo): void;
+  //
+  Addition(num: number, num2: number): number;
 }

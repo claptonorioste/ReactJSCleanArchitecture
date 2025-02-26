@@ -5,6 +5,7 @@ import { Typography, Button, Row, Col, Space } from "antd"
 import { FacebookFilled, TwitterSquareFilled, InstagramFilled } from "@ant-design/icons"
 
 function FooterComponent() {
+   
     return (
         <Row>
             <Col md={24} sm={24} xs={24} lg={12} xl={12} xxl={12}>
